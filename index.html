@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="description" content="职场十字路口决策测试：该跳槽还是该忍一年？升管理还是走专业？16题看清你该往哪走。">
+<title>职场十字路口 · 决策测试</title>
+<style>
+  :root{
+    --bg:#f4f1ea; --bg2:#ece7dc; --ink:#1f1d1a; --ink2:#5a5650; --muted:#8a857c;
+    --line:#d8d1c2; --line2:#e4dfd2; --accent:#7a3b2e; --accent2:#3d5b3a;
+    --shadow:0 1px 0 #fff inset;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; padding:0;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:16px; line-height:1.7;
+    background-image:
+      linear-gradient(var(--line2) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line2) 1px, transparent 1px);
+    background-size:24px 24px;
+    background-position:-1px -1px;
+  }
+  .serif{font-family:Georgia,"Songti SC","SimSun",serif;}
+  .mono{font-family:"SF Mono","Roboto Mono",Menlo,monospace; font-variant-numeric:tabular-nums;}
+  .wrap{max-width:100%; margin:0 auto; min-height:100vh; background:var(--bg);
+    background-image:
+      linear-gradient(var(--line2) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line2) 1px, transparent 1px);
+    background-size:24px 24px;}
+  .screen{display:none; padding:32px 22px 64px; max-width:520px; margin:0 auto;}
+  .screen.active{display:block; animation:fade .4s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
+
+  /* 封面 */
+  .brand{font-size:12px; letter-spacing:.18em; color:var(--muted); text-transform:uppercase; margin-bottom:28px;}
+  .cover h1{font-size:30px; line-height:1.35; margin:0 0 16px; font-weight:700;}
+  .cover h1 em{font-style:normal; color:var(--accent);}
+  .lead{color:var(--ink2); font-size:15px; margin:0 0 20px;}
+  .lead p{margin:0 0 12px;}
+  .dim-chips{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:24px 0;}
+  .chip{border:1px solid var(--line); padding:14px 10px; text-align:center; font-size:13px; color:var(--ink2); background:rgba(255,255,255,.4);}
+  .chip strong{display:block; color:var(--ink); font-size:14px; margin-bottom:4px;}
+  .btn{display:block; width:100%; padding:16px; border:none; cursor:pointer; font-size:16px; font-weight:600;
+    background:var(--ink); color:var(--bg); letter-spacing:.05em; transition:.2s;}
+  .btn:active{transform:translateY(1px);}
+  .btn.outline{background:transparent; color:var(--ink); border:1px solid var(--ink);}
+  .disclaimer{font-size:12px; color:var(--muted); text-align:center; margin-top:20px; line-height:1.6;}
+  .spec{text-align:center; font-size:12px; color:var(--muted); margin-top:28px; padding-top:20px; border-top:1px solid var(--line2); letter-spacing:.05em;}
+
+  /* 答题 */
+  .progress-top{position:sticky; top:0; background:var(--bg); z-index:10; padding:14px 0; border-bottom:1px solid var(--line); margin:0 0 24px;}
+  .progress-meta{display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-bottom:8px;}
+  .progress-bar{height:2px; background:var(--line); position:relative;}
+  .progress-bar i{position:absolute; left:0; top:0; height:100%; background:var(--ink); transition:width .3s;}
+  .qnum{font-size:40px; font-weight:700; color:var(--accent); opacity:.25; line-height:1; margin-bottom:4px;}
+  .qtext{font-size:19px; line-height:1.55; margin:0 0 28px; font-weight:500;}
+  .opts{display:flex; flex-direction:column; gap:12px;}
+  .opt{border:1px solid var(--line); padding:16px 16px 16px 50px; position:relative; cursor:pointer; transition:.15s; background:rgba(255,255,255,.4); font-size:15px;}
+  .opt:active{background:var(--bg2);}
+  .opt.sel{border-color:var(--ink); background:var(--ink); color:var(--bg);}
+  .opt .k{position:absolute; left:16px; top:16px; width:22px; height:22px; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--ink2); font-weight:600;}
+  .opt.sel .k{border-color:var(--bg); color:var(--bg);}
+  .opt.sel.locked{opacity:1;}
+  .opt.locked{pointer-events:none;}
+  .hint{font-size:12px; color:var(--muted); text-align:center; margin-top:20px;}
+
+  /* 结果 */
+  .r-eyebrow{font-size:12px; color:var(--muted); letter-spacing:.1em; margin-bottom:6px;}
+  .r-type{font-size:30px; font-weight:700; margin:0 0 8px; line-height:1.2;}
+  .r-sub{color:var(--ink2); font-size:15px; margin:0 0 28px;}
+  .score-card{border:1px solid var(--line); padding:20px; margin-bottom:28px; background:rgba(255,255,255,.4);}
+  .score-row{margin-bottom:16px;}
+  .score-row:last-child{margin-bottom:0;}
+  .score-label{display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;}
+  .score-label span:last-child{color:var(--accent); font-weight:600;}
+  .score-track{height:24px; position:relative; background:var(--bg2); border:1px solid var(--line2); display:flex;}
+  .score-track .left,.score-track .right{height:100%; transition:width .8s ease;}
+  .score-track .left{background:var(--accent);}
+  .score-track .right{background:var(--accent2); margin-left:auto;}
+  .score-cap{display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-top:6px;}
+
+  /* 十字路口 2x2 */
+  .cross-wrap{margin-bottom:28px;}
+  .cross-title{font-size:13px; color:var(--muted); margin-bottom:12px; text-align:center;}
+  .cross{position:relative; display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--line);}
+  .quad{padding:18px 12px; text-align:center; font-size:12px; color:var(--ink2); background:rgba(255,255,255,.3); border:1px solid var(--line2); min-height:88px; display:flex; flex-direction:column; justify-content:center;}
+  .quad strong{display:block; color:var(--ink); font-size:14px; margin-bottom:4px;}
+  .quad.me{background:var(--ink); color:var(--bg);}
+  .quad.me strong{color:var(--bg);}
+  .quad.me::after{content:"你在这"; display:block; font-size:10px; margin-top:4px; opacity:.7;}
+  .axis-y{position:absolute; left:-12px; top:50%; transform:translateY(-50%) rotate(-90deg); transform-origin:left center; font-size:11px; color:var(--muted); white-space:nowrap;}
+  .axis-x-bottom{display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-top:8px; padding:0 4px;}
+  .axis-x-top{display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-bottom:8px; padding:0 4px;}
+
+  .section{margin-bottom:28px;}
+  .section h3{font-size:15px; margin:0 0 12px; padding-left:0; position:relative;}
+  .section .idx{display:inline-block; width:24px; height:24px; border:1px solid var(--ink); text-align:center; line-height:22px; font-size:12px; margin-right:8px; vertical-align:middle;}
+  .para{color:var(--ink2); font-size:14.5px; line-height:1.8; margin:0 0 10px;}
+  .risks{list-style:none; padding:0; margin:0;}
+  .risks li{padding:8px 0 8px 24px; position:relative; font-size:14px; color:var(--ink2); border-bottom:1px solid var(--line2);}
+  .risks li:before{content:"✕"; position:absolute; left:0; color:var(--accent);}
+  .steps{list-style:none; padding:0; margin:0;}
+  .steps li{display:flex; gap:14px; padding:12px 0; border-bottom:1px solid var(--line2);}
+  .steps li:last-child{border-bottom:none;}
+  .steps .n{flex:0 0 22px; height:22px; border:1px solid var(--ink); text-align:center; line-height:20px; font-size:12px;}
+  .steps .body{font-size:14px; color:var(--ink2);}
+  .steps .body strong{display:block; color:var(--ink); font-size:14px; margin-bottom:2px; font-weight:600;}
+
+  .keyword{text-align:center; padding:24px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin:28px 0;}
+  .keyword small{display:block; font-size:11px; color:var(--muted); margin-bottom:6px; letter-spacing:.1em;}
+  .keyword b{font-size:20px; font-weight:700; color:var(--accent);}
+  .closing{text-align:center; font-size:14px; color:var(--ink2); line-height:1.9; margin:24px 0;}
+  .closing:after{content:""; display:block; width:24px; height:1px; background:var(--line); margin:16px auto 0;}
+  .actions{display:flex; gap:10px; margin-top:8px;}
+  .actions .btn{flex:1;}
+  footer{font-size:11px; color:var(--muted); text-align:center; margin-top:32px; line-height:1.7;}
+
+  /* ===== 响应式：平板/小桌面 (≥768px) ===== */
+  @media (min-width:768px){
+    .screen{max-width:760px; padding:56px 40px 96px;}
+    .brand{font-size:13px; letter-spacing:.22em;}
+    .cover h1{font-size:42px;}
+    .lead{font-size:16.5px;}
+    .dim-chips{gap:14px; margin:32px 0;}
+    .chip{padding:20px 12px; font-size:14px;}
+    .qtext{font-size:23px;}
+    .opt{font-size:16px; padding:18px 18px 18px 56px;}
+    .opt .k{left:18px; top:18px; width:24px; height:24px;}
+    .qnum{font-size:48px;}
+    .r-type{font-size:38px;}
+    .r-sub{font-size:16.5px;}
+    .score-card{padding:28px; display:grid; grid-template-columns:1fr 1fr; gap:28px;}
+    .score-card .score-row{margin-bottom:0;}
+    .cross .quad{min-height:108px; padding:22px 14px;}
+    .cross .quad strong{font-size:15px;}
+    .steps{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+    .steps li{border-bottom:none; border:1px solid var(--line2); padding:18px 16px; align-items:flex-start;}
+    .risks{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+    .risks li{border-bottom:none; border:1px solid var(--line2); padding:16px 14px 16px 34px;}
+    .section{margin-bottom:36px;}
+    .para{font-size:15.5px;}
+    .keyword b{font-size:24px;}
+  }
+
+  /* ===== 响应式：桌面 (≥1100px) ===== */
+  @media (min-width:1100px){
+    body{
+      background-image:
+        radial-gradient(ellipse at center, transparent 30%, rgba(31,29,26,.06) 100%),
+        linear-gradient(var(--line2) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line2) 1px, transparent 1px);
+      background-size:100% 100%, 24px 24px, 24px 24px;
+    }
+    .screen{max-width:920px; padding:80px 48px 128px;}
+    .cover h1{font-size:50px;}
+    .qtext{font-size:25px;}
+    .r-type{font-size:44px;}
+    .btn{max-width:380px; margin-left:auto; margin-right:auto;}
+    .actions{max-width:520px; margin:24px auto 0;}
+    .actions .btn{max-width:none;}
+    .cross .quad{min-height:128px;}
+    .dim-chips{max-width:540px;}
+    .keyword b{font-size:26px;}
+  }
+
+  .toast{position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:var(--ink); color:var(--bg); padding:10px 18px; font-size:13px; opacity:0; transition:.3s; pointer-events:none; z-index:99;}
+  .toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 封面 -->
+  <section id="cover" class="screen active cover">
+    <div class="brand">Career Crossroads</div>
+    <h1 class="serif">留下还是离开<br>往上还是往深<br><em>你卡住的不是能力，是决心。</em></h1>
+    <div class="lead">
+      <p>想跳，又怕跳了更糟。想留，又怕忍成温水青蛙。想往管理走，又舍不得专业。想做专家，又眼馋管理的权力。</p>
+      <p>这个测试不替你做决定。它帮你看见：你心里其实早就选好了，只是不敢承认。</p>
+    </div>
+    <div class="dim-chips">
+      <div class="chip"><strong>去留轴</strong>该跳槽 vs 该忍一年</div>
+      <div class="chip"><strong>发展轴</strong>升管理 vs 走专业</div>
+    </div>
+    <button class="btn" onclick="startQuiz()">开始测试</button>
+    <p class="disclaimer">16 题 · 约 3 分钟<br>本测试属于职业决策参考内容，不构成就业或投资建议。</p>
+    <div class="spec mono">16 Questions · 2 Axes · 1 Crossroads</div>
+  </section>
+
+  <!-- 答题 -->
+  <section id="quiz" class="screen">
+    <div class="progress-top">
+      <div class="progress-meta">
+        <span class="mono" id="qIdx">01 / 16</span>
+        <span id="qAxis">去留轴</span>
+      </div>
+      <div class="progress-bar"><i id="qBar" style="width:6%"></i></div>
+    </div>
+    <div class="qnum mono" id="qNum">01</div>
+    <h2 class="qtext serif" id="qText"></h2>
+    <div class="opts" id="qOpts"></div>
+    <p class="hint">选择后自动进入下一题</p>
+  </section>
+
+  <!-- 结果 -->
+  <section id="result" class="screen"></section>
+
+</div>
+<div class="toast" id="toast">链接已复制</div>
+
+<script>
+/* ============ 题库 ============
+   axis: 'leave' 去留轴  / 'dev' 发展轴
+   leave: v>0 跳槽倾向, v<0 忍倾向
+   dev:   v>0 管理倾向, v<0 专业倾向
+*/
+const QUESTIONS = [
+  // ---- 去留轴 8 ----
+  {axis:'leave', text:'半夜失眠想到工作，冒出来的念头更接近：', opts:[
+    {t:'"再这样下去我就废了"', v:2},
+    {t:'"撑过这阵就好了"', v:-2},
+    {t:'"算了，不想了"', v:0}]},
+  {axis:'leave', text:'你刷招聘软件的频率：', opts:[
+    {t:'几乎天天，已经成习惯', v:2},
+    {t:'偶尔刷，没太当真', v:1},
+    {t:'很少刷，现公司够忙', v:-2}]},
+  {axis:'leave', text:'同事跳槽涨薪30%告诉你，你第一反应：', opts:[
+    {t:'"帮我内推"', v:2},
+    {t:'"他能拿到我不一定"', v:-1},
+    {t:'"我这还有没兑现的期权/项目"', v:-2}]},
+  {axis:'leave', text:'让你留下来的最大理由：', opts:[
+    {t:'大环境差，怕跳了接不住', v:-2},
+    {t:'现公司还有没吃完的红利', v:-1},
+    {t:'其实我已经在看机会了', v:2}]},
+  {axis:'leave', text:'对"再忍一年"这句话，你的真实态度：', opts:[
+    {t:'是麻醉剂，忍着忍着人就钝了', v:2},
+    {t:'是战术，熬过去上一个台阶', v:-2},
+    {t:'取决于忍的是什么', v:0}]},
+  {axis:'leave', text:'过去半年你的状态更像：', opts:[
+    {t:'持续内耗，上班如上坟', v:2},
+    {t:'稳步积累，有成长感', v:-2},
+    {t:'骑驴找马，边干边看', v:1}]},
+  {axis:'leave', text:'想到一年后还在这个工位：', opts:[
+    {t:'后悔今天没走', v:2},
+    {t:'庆幸自己没冲动', v:-2},
+    {t:'没感觉，走一步看一步', v:0}]},
+  {axis:'leave', text:'做决定时你最怕：', opts:[
+    {t:'错过一直在涨的机会窗口', v:2},
+    {t:'跳出去发现更糟，回不来', v:-2},
+    {t:'选错本身', v:0}]},
+  // ---- 发展轴 8 ----
+  {axis:'dev', text:'你理想中的职业高光时刻：', opts:[
+    {t:'带一支队伍打胜仗', v:2},
+    {t:'攻克一个别人解不了的难题', v:-2},
+    {t:'被行业认可为顶尖', v:-1}]},
+  {axis:'dev', text:'工作里你最烦的是：', opts:[
+    {t:'没完没了的对齐会、向上汇报', v:-2},
+    {t:'一直被安排、没有决策权', v:2},
+    {t:'杂活太多', v:0}]},
+  {axis:'dev', text:'新人总来请教你：', opts:[
+    {t:'有成就感，喜欢带人成长', v:2},
+    {t:'打断我钻研，有点烦', v:-2},
+    {t:'看心情', v:0}]},
+  {axis:'dev', text:'"晋升"对你主要意味着：', opts:[
+    {t:'更大的盘子、带更多人', v:2},
+    {t:'能专心做更深的事', v:-2},
+    {t:'钱和头衔', v:0}]},
+  {axis:'dev', text:'你佩服的人是：', opts:[
+    {t:'能聚人、扛事、拍板的帅才', v:2},
+    {t:'一门手艺做到极致的大匠', v:-2},
+    {t:'会搞钱会来事的', v:0}]},
+  {axis:'dev', text:'公司让你选下一步：', opts:[
+    {t:'带5人小组，负责一条业务线', v:2},
+    {t:'不带人，给资源专攻专业', v:-2},
+    {t:'先给我加薪再说', v:0}]},
+  {axis:'dev', text:'你觉得自己最缺的是：', opts:[
+    {t:'带队伍、向上影响的能力', v:2},
+    {t:'更深的专业壁垒', v:-2},
+    {t:'机会', v:0}]},
+  {axis:'dev', text:'成就感更多来自：', opts:[
+    {t:'别人因为我，事情做成了', v:2},
+    {t:'我亲手做出来的作品/方案', v:-2},
+    {t:'薪资涨了', v:0}]}
+];
+
+/* ============ 四象限结果文案 ============ */
+const RESULTS = {
+  jump_manage:{ // 跳+管理
+    name:'破局换轨型',
+    sub:'你不是冲动——你是该走了，而且该带人走了。',
+    diag:'你的跳槽念头不是焦虑，是清醒：留下来的代价已经高过离开。但你要跳的不是"另一份执行岗"，而是"能带队伍的位置"。你早该往上走，而不是在原地等提拔。',
+    advice:'目标锁定"管理岗 + 新赛道"两件事一起换。简历把过去经历重写成"带人、扛事、拿结果"的叙事，别再罗列执行细节。',
+    risks:['因为一时情绪跳到另一个同级执行岗——跳了没换层级等于白跳','裸辞"探索兴趣"——管理空窗越久越难复位','只看薪不看盘子——薪水上去了管理权没拿到'],
+    steps:[
+      {t:'锁定目标盘',d:'列出 3 个"管理岗+你有兴趣的赛道"的组合方向'},
+      {t:'重写管理叙事',d:'把简历每段经历改写成"带X人/扛X结果"，删掉执行描述'},
+      {t:'定向出击',d:'找猎头 + 定向投管理岗，别海投执行岗'}],
+    keyword:'换轨上位'},
+  jump_expert:{ // 跳+专业
+    name:'重估赛道型',
+    sub:'你想换的不是公司，是赛道——继续做你的专家。',
+    diag:'你的不适来自赛道，不是岗位。你在当前赛道已经触到天花板，但你的专业能力本身值钱。该做的是把专业能力平移到更有未来的赛道，而不是丢掉重练。',
+    advice:'锁定"专业岗 + 新赛道"。核心卖点是你的专业可迁移性，不是"愿意学习"。别为了换而换到完全不相关的领域。',
+    risks:['裸辞去"探索兴趣"——兴趣变工作要三年，你的专业护城河不该丢','换赛道还换工种——双变量同时变，必败','降薪去所谓"热爱"——专业人不该用爱发电'],
+    steps:[
+      {t:'盘点可迁移专业',d:'列出 3 个正在抢你这个专业的下游赛道'},
+      {t:'找过来人验证',d:'约 3 个跨赛道过来人聊，问最坏情况'},
+      {t:'平移式求职',d:'投递时主打"专业能力 + 赛道红利"，强调即战力'}],
+    keyword:'赛道平移'},
+  stay_manage:{ // 忍+管理
+    name:'蛰伏掌权型',
+    sub:'再忍一年，但要有目的地忍——为了拿权。',
+    diag:'现在还不是走的最好时机，但你的"忍"必须是战术性的：用这一年把管理权限、人脉、资源拿到手，而不是被动熬。你的目标是权力增量，不是安逸。',
+    advice:'主动要事、要人、要预算。把"忍"变成"蛰伏"。没有新增权力的忍，就是纯消耗。',
+    risks:['忍成舒适区——一年没拿到任何新权力，等于白忍','被动等提拔——权力是争来的不是等来的','只干活不经营——埋头苦干却没人知道你能带人'],
+    steps:[
+      {t:'谈一个带人的项目',d:'主动找老板要一个"能加人"的事，立军令状'},
+      {t:'织跨部门人脉',d:'每月新增 2 个跨部门关键人，积累调动资源'},
+      {t:'设权力红线',d:'半年内若权力零增长，立即启动求职，不再忍'}],
+    keyword:'战术蛰伏'},
+  stay_expert:{ // 忍+专业
+    name:'深耕匠人型',
+    sub:'留下来，不是为了安逸——是为了钻到底。',
+    diag:'你的赛道值得，专业还有深度可挖。现在的"留"是深耕，不是消耗。真正的风险不是留下来，而是留下来却开始混日子。把专业做到不可替代，你就有定价权。',
+    advice:'别被"该转管理了"绑架。专业的天花板远比你以为的高。用这一年构建壁垒：作品、案例、行业能见度。',
+    risks:['把"深耕"过成"重复"——每年做的事和去年一样就是退步','为安全感接杂活——时间被切碎，专业永远到不了顶','闷头做不发声——做得到但没人知道，议价权归零'],
+    steps:[
+      {t:'立代表作',d:'年内产出一个能拿出去讲、能写进简历的硬案例'},
+      {t:'建专业标识',d:'在行业里有稳定发声（文章/分享/社区），让人能搜到你'},
+      {t:'拒绝低价值活',d:'砍掉至少 30% 不积累专业的杂事，时间还给深耕'}],
+    keyword:'深钻成王'}
+};
+
+const CLOSING = '职场没有标准答案。但有一种答案最危险：因为害怕选错，而一直不选。<br>你今天来做这个测试，说明你已经在选了。剩下的，是相信自己的判断。';
+
+/* ============ 状态 & 路由 ============ */
+let cur = 0;
+let answers = []; // [{axis, v}]
+const AXIS_LABEL = {leave:'去留轴', dev:'发展轴'};
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function startQuiz(){
+  cur = 0; answers = [];
+  sessionStorage.removeItem('cc_answers');
+  renderQ();
+  show('quiz');
+}
+
+function renderQ(){
+  const q = QUESTIONS[cur];
+  const total = QUESTIONS.length;
+  document.getElementById('qIdx').textContent = String(cur+1).padStart(2,'0')+' / '+total;
+  document.getElementById('qAxis').textContent = AXIS_LABEL[q.axis];
+  document.getElementById('qBar').style.width = ((cur+1)/total*100)+'%';
+  document.getElementById('qNum').textContent = String(cur+1).padStart(2,'0');
+  document.getElementById('qText').textContent = q.text;
+  const opts = document.getElementById('qOpts');
+  opts.innerHTML = '';
+  q.opts.forEach((o,i)=>{
+    const div = document.createElement('div');
+    div.className = 'opt';
+    div.innerHTML = '<span class="k">'+String.fromCharCode(65+i)+'</span>'+o.t;
+    div.onclick = ()=>pick(div, o);
+    opts.appendChild(div);
+  });
+}
+
+function pick(el, o){
+  if(el.classList.contains('locked')) return;
+  // 锁定所有，标红选中
+  document.querySelectorAll('.opt').forEach(x=>{x.classList.add('locked');});
+  el.classList.add('sel');
+  answers.push({axis:QUESTIONS[cur].axis, v:o.v});
+  setTimeout(()=>{
+    if(cur < QUESTIONS.length-1){
+      cur++; renderQ();
+    } else {
+      sessionStorage.setItem('cc_answers', JSON.stringify(answers));
+      renderResult();
+      show('result');
+    }
+  }, 380);
+}
+
+/* ============ 计分 ============ */
+function score(){
+  let lp=0, ln=0, dp=0, dn=0; // leave正/负, dev正/负
+  answers.forEach(a=>{
+    if(a.axis==='leave'){ a.v>0 ? lp+=a.v : ln+=-a.v; }
+    else { a.v>0 ? dp+=a.v : dn+=-a.v; }
+  });
+  const jumpPct = pct(lp, ln);
+  const managePct = pct(dp, dn);
+  return {jumpPct, managePct};
+}
+function pct(pos, neg){
+  const sum = pos+neg;
+  if(sum===0) return 50;
+  return Math.round(pos/sum*100);
+}
+
+function renderResult(){
+  const {jumpPct, managePct} = score();
+  const isJump = jumpPct>=50;
+  const isManage = managePct>=50;
+  const key = (isJump?'jump':'stay')+'_'+(isManage?'manage':'expert');
+  const R = RESULTS[key];
+
+  // 象限在 2x2 中的位置：行=跳在上/忍在下，列=管理在左/专业在右
+  // 网格顺序：左上 跳+管理 | 右上 跳+专家 | 左下 忍+管理 | 右下 忍+专家
+  const quads = [
+    {k:'jump_manage'}, {k:'jump_expert'}, {k:'stay_manage'}, {k:'stay_expert'}
+  ];
+  const meIdx = quads.findIndex(q=>q.k===key);
+
+  const jumpLeftLabel = '跳槽 '+(100-jumpPct)+'%'; // 左侧=忍的占比? 设计：进度条左=忍 右=跳
+  // 去留进度条：左=忍倾向(100-jump) 红, 右=跳倾向(jump) 绿
+  // 发展进度条：左=专业(100-manage) , 右=管理(manage)
+
+  document.getElementById('result').innerHTML = `
+    <p class="r-eyebrow mono">你的职场定位</p>
+    <h1 class="r-type serif">${R.name}</h1>
+    <p class="r-sub">${R.sub}</p>
+
+    <div class="score-card">
+      <div class="score-row">
+        <div class="score-label"><span>去留轴 · 忍 ◀ ▶ 跳</span><span class="mono">跳槽倾向 ${jumpPct}%</span></div>
+        <div class="score-track">
+          <div class="left" style="width:${100-jumpPct}%"></div>
+          <div class="right" style="width:${jumpPct}%"></div>
+        </div>
+        <div class="score-cap"><span class="mono">${100-jumpPct}% 忍</span><span class="mono">${jumpPct}% 跳</span></div>
+      </div>
+      <div class="score-row">
+        <div class="score-label"><span>发展轴 · 专业 ◀ ▶ 管理</span><span class="mono">管理倾向 ${managePct}%</span></div>
+        <div class="score-track">
+          <div class="left" style="width:${100-managePct}%"></div>
+          <div class="right" style="width:${managePct}%"></div>
+        </div>
+        <div class="score-cap"><span class="mono">${100-managePct}% 专业</span><span class="mono">${managePct}% 管理</span></div>
+      </div>
+    </div>
+
+    <div class="cross-wrap">
+      <p class="cross-title">你的十字路口定位</p>
+      <div class="cross">
+        ${quads.map((q,i)=>`
+          <div class="quad ${i===meIdx?'me':''}">
+            <strong>${RESULTS[q.k].name}</strong>
+            ${RESULTS[q.k].keyword}
+          </div>`).join('')}
+      </div>
+      <div class="axis-x-bottom">
+        <span>◀ 管理倾向</span><span>专业倾向 ▶</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3><span class="idx mono">1</span>诊断</h3>
+      <p class="para">${R.diag}</p>
+    </div>
+
+    <div class="section">
+      <h3><span class="idx mono">2</span>建议怎么做</h3>
+      <p class="para">${R.advice}</p>
+    </div>
+
+    <div class="section">
+      <h3><span class="idx mono">3</span>最不该做</h3>
+      <ul class="risks">${R.risks.map(r=>`<li>${r}</li>`).join('')}</ul>
+    </div>
+
+    <div class="section">
+      <h3><span class="idx mono">4</span>未来 90 天行动</h3>
+      <ul class="steps">${R.steps.map((s,i)=>`
+        <li><span class="n mono">${i+1}</span><span class="body"><strong>${s.t}</strong>${s.d}</span></li>
+      `).join('')}</ul>
+    </div>
+
+    <div class="keyword">
+      <small>你的关键词</small>
+      <b class="serif">${R.keyword}</b>
+    </div>
+
+    <p class="closing">${CLOSING}</p>
+
+    <div class="actions">
+      <button class="btn" onclick="share()">分享结果</button>
+      <button class="btn outline" onclick="startQuiz()">重新测试</button>
+    </div>
+    <footer>职场十字路口决策测试 · 纯娱乐参考，不构成就业建议</footer>
+  `;
+}
+
+function share(){
+  const url = location.href;
+  const R = RESULTS[(score().jumpPct>=50?'jump':'stay')+'_'+(score().managePct>=50?'manage':'expert')];
+  const text = '我的职场十字路口定位是「'+R.name+'」——'+R.sub;
+  if(navigator.share){
+    navigator.share({title:'职场十字路口测试', text, url}).catch(()=>{});
+  } else {
+    const full = text+'\n'+url;
+    if(navigator.clipboard){
+      navigator.clipboard.writeText(full).then(()=>toast('结果与链接已复制'));
+    } else {
+      toast('请手动复制链接');
+    }
+  }
+}
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1800);
+}
+
+// 恢复未完成的答题（可选）：有答案但未到结果则继续
+</script>
+</body>
+</html>
